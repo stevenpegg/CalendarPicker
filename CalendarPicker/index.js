@@ -343,6 +343,9 @@ export default class CalendarPicker extends Component {
       currentView: 'days',
       ...scrollableState,
     });
+
+    const currentMonthYear = moment({ year: currentYear, month: currentMonth, hour: 12 });
+    this.props.onMonthChange && this.props.onMonthChange(currentMonthYear);
   }
 
   resetSelections = () => {
