@@ -344,7 +344,24 @@ export default class CalendarPicker extends Component {
       ...scrollableState,
     });
 
+    // Update the selected date keeping the day the same and just changing the month if possible.
     const currentMonthYear = moment({ year: currentYear, month: currentMonth, hour: 12 });
+    // Set the day to the currently selected day, limiting to the end of the month as required.
+    const day = this.state.selectedStartDate.date();
+    if (day <= currentMonthYear.daysInMonth()) {
+      currentMonthYear.date(day);
+    }
+    else {
+      currentMonthYear.date(currentMonthYear.daysInMonth());
+    }
+    // Limit the date to be on or before the maxDate.
+    while (currentMonthYear.isAfter(this.state.maxDate, "day")) {
+      currentMonthYear.subtract(1, "day");
+    }
+    // Limit the date to be on or after the minDate.
+    while (currentMonthYear.isBefore(this.state.minDate, "day")) {
+      currentMonthYear.add(1, "day");
+    }
     this.props.onMonthChange && this.props.onMonthChange(currentMonthYear);
   }
 
